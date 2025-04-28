@@ -63,7 +63,7 @@ class User {
     };
 
     setIsBanned(banned) {
-        if (typeof isBanned !== "boolean") {
+        if (typeof banned !== "boolean") {
             throw new Error("isBanned must be a boolean");
         }
         this._isBanned = banned;
