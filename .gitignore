@@ -13,3 +13,6 @@ npm-debug.log*
 # Editor configs
 .vscode/
 .idea/
+
+# docker compose files
+docker-compose.yml

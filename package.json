@@ -1,6 +1,7 @@
 {
   "name": "haru_chat_auth_server",
   "version": "1.0.0",
+  "type": "module",
   "description": "auth app for haru_chat",
   "main": "app.js",
   "scripts": {
@@ -25,6 +26,8 @@
   },
   "homepage": "https://github.com/HelloHaruSystem/haru_chat_auth_server#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.15.6"
   }
 }
