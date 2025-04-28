@@ -1,4 +1,3 @@
-// user model definition goes here
 class User {
     constructor(id, username, password, createdAt, isBanned) {
         if (typeof id !== "number") {
@@ -79,3 +78,5 @@ class User {
         };
     };
 };
+
+export { User };
