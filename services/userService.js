@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import { User } from "./../models/User";
+
+import { User } from "./../models/User.js";
 
 class UserService {
     constructor(db) {

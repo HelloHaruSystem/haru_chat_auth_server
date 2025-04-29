@@ -1,5 +1,5 @@
-import { pool, query } from "./../config/db";
-import { User } from "./../models/User";
+import { pool, query } from "./../config/db.js"
+import { User } from "./../models/User.js";
 import { NotFoundError } from "./../middleware/errorMiddleware.js";
 
 class DbService {
@@ -107,7 +107,8 @@ class DbService {
                 `SELECT u.*, array_agg(r.name) AS roles FROM users u
                 LEFT JOIN user_roles AS ur ON u.id = ur.user_id
                 LEFT JOIN roles AS r On ur.role_id = r.id
-                WHERE u.username = $1`,
+                WHERE u.username = $1
+                GROUP BY u.id`,
                 [username]
             );
 
@@ -232,7 +233,7 @@ class DbService {
         try {
             const result = await client.query(
                 `SELECT is_banned FROM users
-                WHERE id 0 $1`,
+                WHERE id = $1`,
                 [id]
             );
 
