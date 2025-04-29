@@ -38,7 +38,7 @@ class UserService {
             // check if user exists
             const existingUser = await this.getUserByUsername(username);
             if (existingUser) {
-                throw new Error(`Error user already exists: ${error}`);
+                throw new Error(`Error user already exists:`);
             }
 
             // hash password
@@ -46,14 +46,18 @@ class UserService {
 
             // create the user
             const user = new User(
+                null,
                 username,
                 hashedPassword,
                 new Date(),
                 false
             );
 
-            // TODO: implement saveUser function in the dbservice
-            await this.db.saveUser(user);
+            // TODO: implement saveUser function in the dbService
+            const userId = await this._db.saveUser(user);
+
+            // set the ID given by the db
+            user.setId(userId);
 
             // return the newly created user
             return user.getSafeObject();
@@ -68,7 +72,7 @@ class UserService {
                 throw new Error("id must be of type number");
             }
     
-            const user = await db.getUserById(id);
+            const user = await this._db.getUserById(id);
             return user ? user.getSafeObject() : null;
         } catch (error) {
             throw new Error(`Error getting user by ID: ${error}`);
@@ -81,7 +85,7 @@ class UserService {
                 throw new Error("username must be of type string");
             }
 
-            const user = await db.getUserByUsername(username);
+            const user = await this._db.getUserByUsername(username);
             return user ? user.getSafeObject() : null;
         } catch (error) {
             throw new Error(`Error getting user by username: ${error}`);
@@ -94,7 +98,7 @@ class UserService {
                 throw new Error("id must be of type number");
             }
 
-            return await db.deleteUser(id);
+            return await this._db.deleteUser(id);
         } catch (error) {
             throw new Error(`Error deleting user: ${error}`);
         }
@@ -106,7 +110,7 @@ class UserService {
                 throw new Error("id must be of type number");
             }
 
-            return await db.banUser(id);
+            return await this._db.banUser(id);
         } catch (error) {
             throw new Error(`Error trying to ban user with ID ${id}: ${error}`);
         }
@@ -118,19 +122,19 @@ class UserService {
                 throw new Error("id must be of type number");
             }
 
-            return await db.unbanUser(id);
+            return await this._db.unbanUser(id);
         } catch (error) {
             throw new Error (`Error trying to unban user with ID ${id}: ${error}`);
         }
     }
 
-    async getUserbanStatus(id) {
+    async getUserBanStatus(id) {
         try {
             if (typeof id !== "number") {
                 throw new Error("id must be of type number");
             }
 
-            return await db.getBanStatus(id);
+            return await this._db.getBanStatus(id);
         } catch (error) {
             throw new Error(`Error fetching ban status of user with ID ${id}: ${error}`);
         }
@@ -142,7 +146,7 @@ class UserService {
                 throw new Error("username and password must be of type string");
             }
 
-            const user = await this.getUserByUsername(username);
+            const user = await this._db.getUserByUsername(username);
 
             if (!user) {
                 return {
@@ -151,7 +155,7 @@ class UserService {
                 };
             }
 
-            if (user.getBanStatus) {
+            if (user.getIsBanned()) {
                 return {
                     success: false,
                     message: "user has been banned"
@@ -177,3 +181,5 @@ class UserService {
         }
     }
 }
+
+export { UserService };

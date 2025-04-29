@@ -15,19 +15,25 @@ const pool = new Pool({
     port: process.env.DB_PORT
 });
 
-// test connection
-pool.query("SELECT NOW()", (err, res) => {
-    if (err) {
-        console.error("Error connecting to database: ", err);
-    } else {
+// test connection on startup
+(async () => {
+    try {
+        const client = await pool.connect();
         console.log("Database connected successfully");
+        client.release();
+    } catch (error) {
+        console.error("Error connecting to database:", error);
     }
-    pool.end();
-});
+})();
 
 // query method
-const query = (text, params) => {
-    pool.query(text, params);
+const query = async (text, params) => {
+    try {
+        const result = await pool.query(text, params);
+        return result;
+    } catch (error) {
+        console.error("Database query error:", error)
+    }
 };
 
 export { pool, query };
