@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import { User } from "./../models/User";
-import e from "express";
 
 class UserService {
     constructor(db) {
@@ -10,6 +9,9 @@ class UserService {
 
     // hash password method
     async hashPassword(password) {
+        if (typeof password !== "string") {
+            throw new Error("username and password must be of type string");
+        }
         try {
             return await bcrypt.hash(password, this._saltRounds);
         } catch (error) {
@@ -29,6 +31,10 @@ class UserService {
     // create a new user method
     async createUser(username, password) {
         try {
+            if (typeof username !== "string" || typeof password !== "string") {
+                throw new Error("username and password must be of type string");
+            }
+
             // check if user exists
             const existingUser = await this.getUserByUsername(username);
             if (existingUser) {
@@ -69,7 +75,7 @@ class UserService {
         }
     } 
 
-    async getUserBuUsername(username) {
+    async getUserByUsername(username) {
         try {
             if (typeof username !== "string") {
                 throw new Error("username must be of type string");
@@ -79,6 +85,95 @@ class UserService {
             return user ? user.getSafeObject() : null;
         } catch (error) {
             throw new Error(`Error getting user by username: ${error}`);
+        }
+    }
+
+    async deleteUserById(id) {
+        try {
+            if (typeof id !== "number") {
+                throw new Error("id must be of type number");
+            }
+
+            return await db.deleteUser(id);
+        } catch (error) {
+            throw new Error(`Error deleting user: ${error}`);
+        }
+    }
+
+    async banUser(id) {
+        try {
+            if (typeof id !== "number") {
+                throw new Error("id must be of type number");
+            }
+
+            return await db.banUser(id);
+        } catch (error) {
+            throw new Error(`Error trying to ban user with ID ${id}: ${error}`);
+        }
+    }
+
+    async unbanUser(id) {
+        try {
+            if (typeof id !== "number") {
+                throw new Error("id must be of type number");
+            }
+
+            return await db.unbanUser(id);
+        } catch (error) {
+            throw new Error (`Error trying to unban user with ID ${id}: ${error}`);
+        }
+    }
+
+    async getUserbanStatus(id) {
+        try {
+            if (typeof id !== "number") {
+                throw new Error("id must be of type number");
+            }
+
+            return await db.getBanStatus(id);
+        } catch (error) {
+            throw new Error(`Error fetching ban status of user with ID ${id}: ${error}`);
+        }
+    }
+
+    async authenticateUser(username, password) {
+        try {
+            if (typeof username !== "string" || typeof password !== "string") {
+                throw new Error("username and password must be of type string");
+            }
+
+            const user = await this.getUserByUsername(username);
+
+            if (!user) {
+                return {
+                    success: false,
+                    message: "User not found"
+                };
+            }
+
+            if (user.getBanStatus) {
+                return {
+                    success: false,
+                    message: "user has been banned"
+                };
+            }
+
+            const isPasswordValid = await this.verifyPassword(password, user._password);
+
+            if (!isPasswordValid) {
+                return {
+                    success: false,
+                    message: "invalid password"
+                };
+            }
+
+            return {
+                success: true,
+                message: "Authentication successful",
+                user: user.getSafeObject()
+            };
+        } catch (error) {
+            throw new Error(`Error trying to Authenticate user ${username}: ${error}`);
         }
     }
 }
