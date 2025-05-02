@@ -2,6 +2,13 @@ import { ValidationError } from "../middleware/errorMiddleware.js";
 import { AuthService } from "../services/authService.js";
 
 /**
+ * Express objects and functions
+ * @typedef {Object} Request Express request object
+ * @typedef {Object} Response Express response object
+ * @typedef {Function} NextFunction Express next middleware function
+ */
+
+/**
  * Controller for authentication. operations include user registration, login and getCurrentUser
  */
 class AuthController {
@@ -16,9 +23,9 @@ class AuthController {
     /**
      *  Register a new user.
      * 
-     * @param {import('express'.Request)} req - Express request object. 
-     * @param {import('express'.Response)} res - Express response object. 
-     * @param {import('express'.NextFunction)} next - Express next middleware function. 
+     * @param {Request} req - Express request object. 
+     * @param {Response} res - Express response object. 
+     * @param {Function} next - Express next middleware function. 
      */
     register = async (req, res, next) => {
         try {
@@ -38,9 +45,9 @@ class AuthController {
     /**
      * logs in a user
      * 
-     * @param {import('express'.Request)} req - Express request object. 
-     * @param {import('express'.Response)} res - Express response object. 
-     * @param {import('express'.NextFunction)} next - Express next middleware function.
+     * @param {Request} req - Express request object. 
+     * @param {Response} res - Express response object. 
+     * @param {Function} next - Express next middleware function. 
      */
     login = async (req, res, next) => {
         try {
@@ -60,9 +67,9 @@ class AuthController {
    /**
     * Gets the current user information
     *  
-    * @param {import('express'.Request)} req - Express request object. 
-    * @param {import('express'.Response)} res - Express response object. 
-    * @param {import('express'.NextFunction)} next - Express next middleware function.
+    * @param {Request} req - Express request object. 
+    * @param {Response} res - Express response object. 
+    * @param {Function} next - Express next middleware function. 
     */
     getCurrentUser = async (req, res, next) => {
         try {

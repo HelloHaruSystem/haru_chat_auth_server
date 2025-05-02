@@ -1,10 +1,11 @@
 {
-    "source": {
-      "include": ["./models/User.js"],      
-      "includePattern": ".js$"
-    },
-    "opts": {
-      "destination": "./docs",
-      "recurse": true
-    }
+  "source": {
+    "include": ["./"],
+    "includePattern": "\\.js$",
+    "excludePattern": "(node_modules/|docs/)"
+  },
+  "opts": {
+    "destination": "./docs",
+    "recurse": true
   }
+}
