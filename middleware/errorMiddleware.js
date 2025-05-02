@@ -32,6 +32,8 @@ const notFoundHandler = (req, res) => {
 };
 
 // Custom error classes
+
+// validation error (400 bad request)
 class ValidationError extends Error {
     constructor(message) {
         super(message);
@@ -39,6 +41,8 @@ class ValidationError extends Error {
     }
 }
 
+
+// authentication failures (401 unauthorized)
 class AuthenticationError extends Error {
     constructor(message) {
         super(message);
@@ -46,6 +50,7 @@ class AuthenticationError extends Error {
     }
 }
 
+// permission issues (403 forbidden)
 class ForbiddenError extends Error {
     constructor(message) {
         super(message);
@@ -53,6 +58,7 @@ class ForbiddenError extends Error {
     }
 }
 
+// resources not found or non exiting (404 not found)
 class NotFoundError extends Error {
     constructor(message) {
         super(message);
@@ -60,6 +66,7 @@ class NotFoundError extends Error {
     }
 }
 
+// conflict with existing resources (409 Conflict)
 class ConflictError extends Error {
     constructor(message) {
         super(message);

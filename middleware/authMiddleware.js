@@ -1,66 +1,57 @@
-import { AuthenticationError, ForbiddenError } from '../middleware/errorMiddleware.js';
+import { verifyToken, extractToken } from "../utils/jwtUtils";
+import { AuthenticationError, ForbiddenError } from "./errorMiddleware";
+import { UserService  } from "../services/userService";
+import { DbService } from "../services/dbService";
 
-class AuthMiddleware {
-    constructor(userService, jwtUtils) {
-        this.userService = userService;
-        this.jwtUtils = jwtUtils;
+const dbService = new DbService();
+const userService = new UserService(dbService);
+
+// Authentication middleware
+const authenticate = async (req, res, next) => {
+    try {
+        const token = extractToken(req);
+
+        if (!token) {
+            throw new AuthenticationError("Authentication required");
+        }
+
+        const decoded = verifyToken(token);
+        
+        // check if user exists or is not banned
+        const user = await userService.getUserById(decoded.userId);
+
+        if (!user) {
+            throw new AuthenticationError("User not found");
+        }
+
+        if (user.isBanned) {
+            throw new ForbiddenError("User is banned");
+        }
+
+        // add the user information to the request
+        req.user = decoded;
+        next();
+    } catch (error) {
+        if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+            next(new AuthenticationError("Invalid or expired token"));
+        } else {
+            next(error);
+        }
+    }
+};
+
+// Authorization middleware
+const authorize = (roles = []) => {
+    if (typeof roles === "string") {
+        roles= [roles];
     }
 
-    // Authenticate JWT token middleware
-    authenticate() {
-        return async (req, res, next) => {
-            try {
-                // Get token from authorization header
-                const authHeader = req.headers.authorization;
-                
-                if (!authHeader || !authHeader.startsWith('Bearer ')) {
-                    throw new AuthenticationError('No token provided');
-                }
+    return (req, res, next) => {
+        if (!req.user || !req.user.roles || (roles.length && !req.user.roles.some(role => roles.includes(role)))) {
+            throw new ForbiddenError("Insufficient permissions");
+        }
+        next();
+    };
+};
 
-                const token = this.jwtUtils.extractTokenFromHeader(authHeader);
-                
-                // Verify token
-                const decoded = this.jwtUtils.verifyToken(token);
-                
-                // Check if user exists
-                const user = await this.userService.getUserById(decoded.id);
-                if (!user) {
-                    throw new AuthenticationError('User not found');
-                }
-
-                // Check if user is banned
-                if (user.isBanned) {
-                    throw new ForbiddenError('User is banned');
-                }
-
-                // Add user to request
-                req.user = user;
-                next();
-            } catch (error) {
-                next(error);
-            }
-        };
-    }
-
-    // Administrator check middleware
-    isAdmin() {
-        return (req, res, next) => {
-            if (!req.user || !req.user.roles || !req.user.roles.includes('admin')) {
-                throw new ForbiddenError('Requires admin privileges');
-            }
-            next();
-        };
-    }
-    
-    // Role check middleware
-    hasRole(roleName) {
-        return (req, res, next) => {
-            if (!req.user || !req.user.roles || !req.user.roles.includes(roleName)) {
-                throw new ForbiddenError(`Requires ${roleName} role`);
-            }
-            next();
-        };
-    }
-}
-
-export { AuthMiddleware };
+export { authenticate, authorize };
