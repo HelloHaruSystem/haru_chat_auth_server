@@ -16,3 +16,6 @@ npm-debug.log*
 
 # docker compose files
 docker-compose.yml
+
+# doc files for now
+docs/

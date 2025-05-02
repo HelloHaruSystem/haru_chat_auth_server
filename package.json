@@ -5,7 +5,9 @@
   "description": "auth app for haru_chat",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "jsdoc -c jsdoc.json",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +33,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.15.6"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.4"
   }
 }
