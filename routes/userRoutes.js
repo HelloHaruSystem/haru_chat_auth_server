@@ -24,5 +24,9 @@ router.delete("/:id", authenticate, authorize([admin]), userController.deleteUse
 router.put("/:id/ban", authenticate, authorize(["admin"]), userController.banUser);
 // unban user
 router.put("/:id/unban", authenticate, authorize(["admin"]), userController.unbanUser);
+// get all users
+router.get("/", authenticate, authorize(["admin"]), userController.getAllUsers);
+// get user by id
+router.get("/:id", authenticate, authorize(["admin"]), userController.getUserById);
 
 export { router };

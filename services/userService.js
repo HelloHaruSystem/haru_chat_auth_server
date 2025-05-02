@@ -80,6 +80,17 @@ class UserService {
         }
     } 
 
+    async getAllUsers() {
+        try {
+            const users = await this._db.getAllUsers();
+
+            // map to safe objects
+            return users.map(user => user.getSafeObject());
+        } catch (error) {
+            throw new Error(`Error fetching all users: ${error}`);
+        }
+    }
+
     async getUserByUsername(username) {
         try {
             if (typeof username !== "string") {

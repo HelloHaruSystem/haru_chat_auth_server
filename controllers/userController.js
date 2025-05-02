@@ -120,6 +120,19 @@ class UserController {
             next(error);
         }
     };
+
+    getAllUsers = async (req, res, next) => {
+        try {
+            const users = await this._userService.getAllUsers();
+
+            res.json({
+                success: true,
+                users;
+            })
+        } catch (error) {
+            next(error);
+        }
+    };
 }
 
 export { UserController };

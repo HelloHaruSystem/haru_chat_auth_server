@@ -125,6 +125,25 @@ class DbService {
         }
     }
 
+    async getAllUsers() {
+        const client = await pool.connect();
+
+        try {
+            const result = await client.query(
+                `SELECT u.* array_agg(r.name) AS roles FROM users u
+                LEFT JOIN user_roles AS ur ON u.id = ur.user_id
+                LEFT JOIN roles AS r ON r.id = ur.role_id
+                GROUP BY u.id`
+            );
+
+            return result.rows.map(row => this._mapDbUserToModel(row));
+        } catch (error) {
+            console.error("Error fetching users", error);
+        } finally {
+            client.release();
+        }
+    }
+
     async deleteUser(id) {
         const client = await pool.connect();
 
