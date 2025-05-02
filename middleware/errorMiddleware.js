@@ -74,6 +74,14 @@ class ConflictError extends Error {
     }
 }
 
+// I'm a teapot (418)
+class ImATeapotError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "I'm a teapot"
+    }
+}
+
 export {
     errorHandler,
     notFoundHandler,
@@ -81,5 +89,6 @@ export {
     AuthenticationError,
     ForbiddenError,
     NotFoundError,
-    ConflictError
+    ConflictError,
+    ImATeapotError
 };
