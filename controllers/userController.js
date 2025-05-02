@@ -1,5 +1,5 @@
 import { ValidationError } from "../middleware/errorMiddleware.js";
-import { userService } from "../services/userService.js";
+import { UserService } from "../services/userService.js";
 
 class UserController {
     constructor(userService) {
@@ -127,8 +127,8 @@ class UserController {
 
             res.json({
                 success: true,
-                users;
-            })
+                users,
+            });
         } catch (error) {
             next(error);
         }

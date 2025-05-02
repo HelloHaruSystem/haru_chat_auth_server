@@ -19,7 +19,7 @@ router.get(":id", authenticate, userController.getUserById);
 // create new user
 router.post("/", authenticate, authorize(["admin"]), userController.createUser);
 // delete user
-router.delete("/:id", authenticate, authorize([admin]), userController.deleteUser);
+router.delete("/:id", authenticate, authorize(["admin"]), userController.deleteUser);
 // ban user
 router.put("/:id/ban", authenticate, authorize(["admin"]), userController.banUser);
 // unban user

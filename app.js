@@ -16,14 +16,14 @@ app.use(express.json());
 
 // home route/root route
 app.get("/", (req, res) => {
-    res.send("Welcome to\nHaru_chat auth and user management");
+    res.send("Welcome to<br>Haru_chat auth and user management");
 });
 
 // routes
 // auth route
 app.use("/api/auth", authRoutes);
 // user routes
-app.use("api/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 // error handling
 app.use(errorHandler);
