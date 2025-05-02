@@ -1,7 +1,7 @@
-import { verifyToken, extractToken } from "../utils/jwtUtils";
-import { AuthenticationError, ForbiddenError } from "./errorMiddleware";
-import { UserService  } from "../services/userService";
-import { DbService } from "../services/dbService";
+import { verifyToken, extractToken } from "../utils/jwtUtils.js";
+import { AuthenticationError, ForbiddenError } from "./errorMiddleware.js";
+import { UserService  } from "../services/userService.js";
+import { DbService } from "../services/dbService.js";
 
 const dbService = new DbService();
 const userService = new UserService(dbService);

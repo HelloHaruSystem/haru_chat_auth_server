@@ -1,5 +1,5 @@
-import { ValidationError } from "../middleware/errorMiddleware";
-import { AuthService } from "../services/authService";
+import { ValidationError } from "../middleware/errorMiddleware.js";
+import { AuthService } from "../services/authService.js";
 
 /**
  * Controller for authentication. operations include user registration, login and getCurrentUser

@@ -1,6 +1,6 @@
 {
     "source": {
-      "include": ["**/*.js"],      
+      "include": ["./models/User.js"],      
       "includePattern": ".js$"
     },
     "opts": {

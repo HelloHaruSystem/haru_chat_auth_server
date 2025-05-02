@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware.js";
 import { DbService } from "./services/dbService.js";
 import { UserService } from "./services/userService.js";
-import { authRoutes } from "./routes/authRoutes.js";
+import { router as authRoutes } from "./routes/authRoutes.js";
 import { authenticate, authorize } from "./middleware/authMiddleware.js";
 
 // load environment variables
@@ -28,7 +28,8 @@ app.get("/", (req, res) => {
 // auth routes
 app.use("/api/auth", authRoutes);
 
-app.post("/api/users", async (req, res) => {
+// protected routes
+app.post("/api/users", authenticate, authorize(["admin"]), async (req, res) => {
     try {
         const { username, password } = req.body;
         
@@ -52,7 +53,8 @@ app.post("/api/users", async (req, res) => {
     }
 });
 
-app.get("/api/users/:id", async (req, res) => {
+
+app.get("/api/users/:id", authenticate, async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
 
@@ -60,6 +62,14 @@ app.get("/api/users/:id", async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: "Invalid id"
+            });
+        }
+
+        // check if user is admin or requesting their own information
+        if (!req.user.roles.includes("admin") && req.user.userId !== id) {
+            return res.status(403).json({
+                success: false,
+                message: "Forbidden - You can only access your won user data"
             });
         }
 
@@ -84,7 +94,7 @@ app.get("/api/users/:id", async (req, res) => {
     }
 })
 
-app.delete("/api/users/:id", async (req, res) => {
+app.delete("/api/users/:id", authenticate, authorize(["admin"]), async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
 
@@ -117,6 +127,7 @@ app.delete("/api/users/:id", async (req, res) => {
     }
 });
 
+/*
 app.post("/api/auth/login", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -142,8 +153,9 @@ app.post("/api/auth/login", async (req, res) => {
         })
     }
 });
+*/
 
-app.put("/api/users/:id/ban", async (req, res) => {
+app.put("/api/users/:id/ban", authenticate, authorize(["admin"]), async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
         
@@ -175,7 +187,7 @@ app.put("/api/users/:id/ban", async (req, res) => {
     }
 });
 
-app.put("/api/users/:id/unban", async (req, res) => {
+app.put("/api/users/:id/unban", authenticate, authorize(["admin"]), async (req, res) => {
     try {
         const id = parseInt(req.params.id, 10);
 
