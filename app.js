@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware.js";
 import { DbService } from "./services/dbService.js";
 import { UserService } from "./services/userService.js";
+import { authRoutes } from "./routes/authRoutes.js";
+import { authenticate, authorize } from "./middleware/authMiddleware.js";
 
 // load environment variables
 dotenv.config();
@@ -22,6 +24,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("User management");
 });
+
+// auth routes
+app.use("/api/auth", authRoutes);
 
 app.post("/api/users", async (req, res) => {
     try {
