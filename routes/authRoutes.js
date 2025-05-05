@@ -22,17 +22,4 @@ router.post("/login", authController.login);
 // protected routes
 router.get("/me", authenticate, authController.getCurrentUser);
 
-// Admin only routes
-router.get("/users", authenticate, authorize(["admin"]), async (req, res, next) => {
-    try {
-        //TODO: Move this to a userController
-        res.json({
-            success: true,
-            message: "Admin only - list of users goes here"
-        });
-    } catch (error) {
-        next(error);
-    }
-});
-
 export { router };

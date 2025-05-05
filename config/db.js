@@ -1,4 +1,10 @@
-// db stuff
+/**
+ * Database and query config and utils
+ * This Module provides a configured PostgreSQL connection pool
+ * with a function to query
+ * @module db
+ */
+
 import pg from "pg";
 import dotenv from "dotenv";
 
@@ -7,6 +13,9 @@ const { Pool } = pg;
 // load environment variables
 dotenv.config();
 
+/**
+ *  postgres DB pool
+ */
 const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -26,7 +35,21 @@ const pool = new Pool({
     }
 })();
 
-// query method
+/**
+ * Executes a parameterized sql query on the database
+ * 
+ * @async
+ * @param {string} text - sql commands
+ * @param {Array} params - params for the query 
+ * @returns {Promise<pg.QueryResult>} - Query result object
+ * @throws {Error} - Logs database errors but doesn't throw them
+ * @example
+ * // simple query without parameters
+ * const users = await query("SELECT * FROM users");
+ * 
+ * // simple query with parameters
+ * const user = await query("SELECT * FROM USERS WHERE ID = $1", [userUd]);
+ */
 const query = async (text, params) => {
     try {
         const result = await pool.query(text, params);
