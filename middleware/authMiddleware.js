@@ -3,7 +3,7 @@
  * provides functions to authenticate requests using JWT
  * and authorize access based on user roles
  * 
- * @module middleware/authMiddleware.js
+ * @module middleware/authMiddleware
  */
 
 import { verifyToken, extractToken } from "../utils/jwtUtils.js";

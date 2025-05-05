@@ -2,7 +2,7 @@
  * Error handling middleware and custom error classes
  * Provides error classes for common http response codes
  * 
- * @module middleware/errorMiddleware.js
+ * @module middleware/errorMiddleware
  */
 
 /**

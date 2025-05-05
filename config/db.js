@@ -2,7 +2,8 @@
  * Database and query config and utils
  * This Module provides a configured PostgreSQL connection pool
  * with a function to query
- * @module db
+ * 
+ * @module config/db
  */
 
 import pg from "pg";

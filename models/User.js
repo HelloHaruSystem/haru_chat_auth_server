@@ -2,7 +2,7 @@
  * User model for Haru_chat
  * Represents a user entity
  * 
- * @module models/User.js
+ * @module models/User
  */
 
 /**

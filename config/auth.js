@@ -1,3 +1,10 @@
+/**
+ * Authentication configuration for Haru_Chat.
+ * Provides configuration constants for JWT, password hashing and sessions.
+ * 
+ * @module config/auth
+ */
+
 import dotenv from "dotenv";
 
 // load .env file

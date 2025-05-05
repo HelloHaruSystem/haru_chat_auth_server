@@ -1,6 +1,8 @@
 /**
  * Main application entry point for Haru_Chat_Auth_Server
  * Sets up Express server, middleware and routes.
+ * 
+ * @module app
  */
 
 import express from "express";
