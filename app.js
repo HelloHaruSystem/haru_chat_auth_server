@@ -37,7 +37,8 @@ app.use(express.json());
  * @param {express.Response} res - Express response object
  */
 app.get("/", (req, res) => {
-    res.send("Welcome to<br>Haru_chat auth and user management");
+    res.send(`<h1>Welcome to Haru_chat auth and user management</h1>
+        <h3>Please check the README.md at my <a href="https://github.com/HelloHaruSystem/haru_chat_auth_server/" target="_blank" rel="noopener noreferrer">github</a> :)</h3>`);
 });
 
 // routes
