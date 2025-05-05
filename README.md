@@ -2,7 +2,7 @@
 
 An authentication and user management server for Haru_Chat. This server provides authentication, registration, and management
 
-> **Note:** This project is primarily for learning purposes, in building secure authentication systems with Node.js, Express, and PostgreSQL.
+> **Note:** This project is primarily for learning purposes, in building authentication systems with Node.js, Express, and PostgreSQL.
 
 ## Overview
 
