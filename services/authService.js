@@ -1,13 +1,39 @@
+/**
+ * Authentication service for Haru_chat.
+ * handles user registration, login, and token validation
+ * 
+ * @module services/authService
+ */
+
 import bcrypt from "bcrypt";
 
 import { generateToken } from "./../utils/jwtUtils.js";
 import { ValidationError, AuthenticationError, NotFoundError, ConflictError, ForbiddenError } from "../middleware/errorMiddleware.js";
 
+/**
+ * Service class for handling authentication related stuff
+ */
 class AuthService {
+    /**
+     * Constructor 
+     * Creates an instance of AuthService
+     * 
+     * @param {Object} userService - Instance of UserService for user related stuff
+     */
     constructor(userService) {
         this._userService = userService;
     }
 
+    /**
+     * Register a new user
+     * 
+     * @async
+     * @param {string} username - User's username
+     * @param {string} password - User's password (will be hashed)
+     * @returns {Promise<Object} Result object with user data
+     * @throws {ValidationError} If username or password is not present
+     * @throws {ConflictError} If user already exists
+     */
     async register(username, password) {
         try {
             if (!username || !password) {
@@ -30,6 +56,17 @@ class AuthService {
         }
     }
 
+    /**
+     * Login method
+     * Authenticates a user and generates a JWT.
+     * 
+     * @async
+     * @param {string} username - User's username
+     * @param {string} password - User's password
+     * @returns {Promise<Object} - Result object with token and user data
+     * @throws {NotFoundError} If user is not found
+     * @throws {ForbiddenError} if user is banned or doesn't have access
+     */
     async login(username, password) {
         try {
             if (!username || !password) {
@@ -66,6 +103,15 @@ class AuthService {
         }
     }
 
+    /**
+     * Validates a user token by checking if user exists and is not banned.
+     * 
+     * @async
+     * @param {number} userId - ID of the user to validate
+     * @returns {Promise<Object} Result object with user data
+     * @throws {NotFoundError} If user is not found
+     * @throws {ForbiddenError} If user is banned
+     */
     async validateToken(userId) {
         try {
             const user = await this._userService.getUserById(userId);
