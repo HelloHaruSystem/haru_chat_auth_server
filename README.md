@@ -2,6 +2,8 @@
 
 An authentication and user management server for Haru_Chat. This server provides authentication, registration, and management
 
+> **Note:** This project is primarily for learning purposes, in building secure authentication systems with Node.js, Express, and PostgreSQL.
+
 ## Overview
 
 Haru_Chat_Auth_Server is a Node.js/Express application that handles all authentication and user management operations for Haru_Chat. It works alongside the [Haru_Chat_Server](https://github.com/HelloHaruSystem/haru_chat_server) and integrates with the [Haru_Chat_Client](https://github.com/HelloHaruSystem/haru_chat_client) desktop application.
@@ -57,7 +59,7 @@ The project follows a layered architecture pattern:
    DB_PORT=5432
    JWT_SECRET=your_jwt_secret
    JWT_EXPIRES_IN=24h
-   SALT_ROUNDS=10
+   SALT_ROUNDS=salt_rounds
    SESSION_SECRET=your_session_secret
    ```
 
@@ -66,28 +68,27 @@ The project follows a layered architecture pattern:
 
    ```sql
    -- Users table
-   CREATE TABLE users (
-     id SERIAL PRIMARY KEY,
-     username VARCHAR(50) UNIQUE NOT NULL,
-     password VARCHAR(100) NOT NULL,
-     created_at TIMESTAMP NOT NULL,
-     is_banned BOOLEAN NOT NULL DEFAULT false
-   );
+    CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(25) NOT NULL,
+        password TEXT NOT NULL,
+        created_at DATE DEFAULT NOW(),
+        is_banned bool
+    );
 
-   -- Roles table
-   CREATE TABLE roles (
-     id SERIAL PRIMARY KEY,
-     name VARCHAR(20) UNIQUE NOT NULL
-   );
+    -- Roles table
+    CREATE TABLE roles (
+        id INTEGER PRIMARY KEY,
+        name VARCHAR(25)
+    );
 
-   -- User roles relationship table
-   CREATE TABLE user_roles (
-     user_id INTEGER NOT NULL,
-     role_id INTEGER NOT NULL,
-     PRIMARY KEY (user_id, role_id),
-     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-     FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
-   );
+    -- Join table of users and roles
+    CREATE TABLE user_roles (
+        user_id INTEGER REFERENCES users(id),
+        role_id INTEGER REFERENCES roles(id),
+
+        PRIMARY KEY(user_id, role_id)
+    );
    ```
 
 5. Start the server:
@@ -118,15 +119,6 @@ The project follows a layered architecture pattern:
 - **DELETE** `/api/users/:id` - Delete a user
 - **PUT** `/api/users/:id/ban` - Ban a user
 - **PUT** `/api/users/:id/unban` - Unban a user
-
-## Authentication Flow
-
-1. **Registration**: Users register with a username and password
-2. **Login**: Users login to receive a JWT token
-3. **Authentication**: Subsequent requests include the JWT token in the Authorization header
-4. **Verification**: The server verifies the token before processing protected requests
-5. **Authorization**: Role-based permissions control access to admin features
-
 
 ## Integration with Haru_Chat
 
