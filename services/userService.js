@@ -1,14 +1,38 @@
+/**
+ * User service for Haru_chat
+ * handles user management stuff including creation, retrieval,
+ * password hashing and user authentication
+ * 
+ * @module services/userService
+ */
+
 import bcrypt from "bcrypt";
 
 import { User } from "./../models/User.js";
 
+/**
+ * Service class for handling user-related stuff
+ */
 class UserService {
+    /**
+     * Constructor method for UserService.
+     * Creates a new instance of UserService
+     * 
+     * @param {Object} db - DB service instance
+     */
     constructor(db) {
         this._db = db;
         this._saltRounds = 10;
     }
 
-    // hash password method
+    /**
+     * Method for hashing passwords using bcrypt
+     * 
+     * @async 
+     * @param {string} password - password in plaintext to hash
+     * @returns {Promise<string>} hashed password
+     * @throws {Error} If password is not of type string or hashing fails
+     */
     async hashPassword(password) {
         if (typeof password !== "string") {
             throw new Error("username and password must be of type string");
@@ -20,7 +44,15 @@ class UserService {
         }
     }
 
-    // verify password method
+    /**
+     * Method for verifying passwords
+     * 
+     * @async
+     * @param {string} password - plain text password you want to verify
+     * @param {string} hashedPassword  - Hashed password to compare with the plain text password given
+     * @returns {Promise<boolean>} boolean representing if the passwords matches
+     * @throws {Error} If verification fails
+     */
     async verifyPassword(password, hashedPassword) {
         try {
             return await bcrypt.compare(password, hashedPassword);
@@ -29,7 +61,15 @@ class UserService {
         }
     }
 
-    // create a new user method
+    /**
+     * Create a new user.
+     * 
+     * @async
+     * @param {string} username - username for the new user
+     * @param {string} password - Plain text password of a new user (this will be hashed)
+     * @returns {Promise<Object>} - Returns a Safe user object without the password
+     * @throws {Error} If validation fails or user already exists
+     */
     async createUser(username, password) {
         try {
             if (typeof username !== "string" || typeof password !== "string") {
@@ -67,6 +107,14 @@ class UserService {
         }
     }
 
+    /**
+     * Gets a user by ID 
+     * 
+     * @async
+     * @param {number} id - ID of the user you want to get
+     * @returns {Promise<Object|null>} Safe User object without password or null if not found
+     * @throws {Error} If user couldn't be retrieved or ID is not of type number
+     */
     async getUserById(id) {
         try {
             if (typeof id !== "number") {
@@ -80,6 +128,13 @@ class UserService {
         }
     } 
 
+    /**
+     * Gets all users
+     * 
+     * @async
+     * @returns {Promise<Object[]>} Array of safe user objects not containing passwords
+     * @throws {Error} If retrieval fails
+     */
     async getAllUsers() {
         try {
             const users = await this._db.getAllUsers();
@@ -91,6 +146,14 @@ class UserService {
         }
     }
 
+    /**
+     * Gets a user by username
+     * 
+     * @async
+     * @param {string} username - Username of the user you want to retrieve
+     * @returns {Promise<Object|null>} Safe User object without password or null if not found
+     * @throws {Error} If user couldn't be retrieved or username is not of type string
+     */
     async getUserByUsername(username) {
         try {
             if (typeof username !== "string") {
@@ -104,6 +167,14 @@ class UserService {
         }
     }
 
+    /**
+     * Deletes a user by ID
+     * 
+     * @async
+     * @param {number} id - ID of the user to delete
+     * @returns {Promise<boolean>} weather deletion was successful
+     * @throws {Error} If deletion fails or id is not of type number
+     */
     async deleteUserById(id) {
         try {
             if (typeof id !== "number") {
@@ -116,6 +187,14 @@ class UserService {
         }
     }
 
+    /**
+     * Bans a user by ID
+     * 
+     * @async
+     * @param {number} id - ID of the user to ban
+     * @returns {Promise<boolean>} weather ban was successful or not
+     * @throws {Error} if ban fails or id is not of type number
+     */
     async banUser(id) {
         try {
             if (typeof id !== "number") {
@@ -128,6 +207,14 @@ class UserService {
         }
     }
 
+    /**
+     * Unbans a user by ID
+     * 
+     * @async
+     * @param {number} id - ID of the user to unban
+     * @returns {Promise<boolean>} weather unban was successful or not
+     * @throws {Error} if unban fails or id is not of type number
+     */
     async unbanUser(id) {
         try {
             if (typeof id !== "number") {
@@ -140,6 +227,13 @@ class UserService {
         }
     }
 
+    /**
+     * Gets a user's ban status by ID
+     * 
+     * @param {number} id - ID of the user to check
+     * @returns {Promise<boolean>} Weather the user is banned or not
+     * @throws {Error} If check fails or id is not of type number
+     */
     async getUserBanStatus(id) {
         try {
             if (typeof id !== "number") {
@@ -152,6 +246,15 @@ class UserService {
         }
     }
 
+    /**
+     * Authenticate a user by username and password.
+     * 
+     * @async
+     * @param {string} username - username to authenticate
+     * @param {string} password - plain text password to verify
+     * @returns {Promise<Object>} Authenticate result with a success flag and user data
+     * @throws {Error} If input validation fails or authentication errors happens
+     */
     async authenticateUser(username, password) {
         try {
             if (typeof username !== "string" || typeof password !== "string") {

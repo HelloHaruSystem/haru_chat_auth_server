@@ -1,4 +1,11 @@
 /**
+ * User model for Haru_chat
+ * Represents a user entity
+ * 
+ * @module models/User.js
+ */
+
+/**
  *  Represents a user of haru_chat
  */
 class User {
