@@ -115,6 +115,9 @@ class ConflictError extends Error {
  * Custom error class for I'm a Teapot 418(I'm a teapot)
  * old aprils fools joke
  * just for fun
+ * 
+ * ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/418
+ * 
  * @extends Error
  */
 class ImATeapotError extends Error {
