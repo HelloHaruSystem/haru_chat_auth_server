@@ -1,3 +1,11 @@
+/**
+ * Authentication and authorization middleware for Haru_chat
+ * provides functions to authenticate requests using JWT
+ * and authorize access based on user roles
+ * 
+ * @module middleware/authMiddleware.js
+ */
+
 import { verifyToken, extractToken } from "../utils/jwtUtils.js";
 import { AuthenticationError, ForbiddenError } from "./errorMiddleware.js";
 import { UserService  } from "../services/userService.js";
@@ -6,7 +14,18 @@ import { DbService } from "../services/dbService.js";
 const dbService = new DbService();
 const userService = new UserService(dbService);
 
-// Authentication middleware
+/**
+ * Middleware to authenticate requests using JWT.
+ * Extracts and verifies the JWT from the authorization header
+ * then adds the decoded user information to the request.
+ * 
+ * @async
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ * @throws {AuthenticationError} If authentication fails
+ * @throws {ForbiddenError} If user is banned 
+ */
 const authenticate = async (req, res, next) => {
     try {
         const token = extractToken(req);
@@ -40,7 +59,14 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-// Authorization middleware
+/**
+ * Middleware to authorize requests based on user roles.
+ * Checks if the user has at least one of the required roles.
+ * 
+ * @param {string|string[]} roles - Role or roles of the user 
+ * @returns {Function} express middleware function
+ * @throws {ForbiddenError} if user lacks required role/roles
+ */
 const authorize = (roles = []) => {
     if (typeof roles === "string") {
         roles= [roles];

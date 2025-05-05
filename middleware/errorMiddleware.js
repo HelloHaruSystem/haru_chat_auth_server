@@ -1,4 +1,20 @@
-// Error handling middleware
+/**
+ * Error handling middleware and custom error classes
+ * Provides error classes for common http response codes
+ * 
+ * @module middleware/errorMiddleware.js
+ */
+
+/**
+ * Error handling middleware for express
+ * Catches errors throw in routes or other middleware,
+ * formats the them and sends a JSON response
+ * 
+ * @param {Error} err - Error object
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
 const errorHandler = (err, req, res, next) => {
     console.error(`[ERROR] ${err.stack}`);
     
@@ -23,7 +39,12 @@ const errorHandler = (err, req, res, next) => {
     });
 };
 
-// 404 middleware for undefined routes
+/**
+ * Middleware for handling 404(Not Found) errors
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 const notFoundHandler = (req, res) => {
     res.status(404).json({
         success: false,
@@ -33,7 +54,10 @@ const notFoundHandler = (req, res) => {
 
 // Custom error classes
 
-// validation error (400 bad request)
+/**
+ * Custom error class for validation errors 400(Bad Request)
+ * @extends Error
+ */
 class ValidationError extends Error {
     constructor(message) {
         super(message);
@@ -41,8 +65,10 @@ class ValidationError extends Error {
     }
 }
 
-
-// authentication failures (401 unauthorized)
+/**
+ * Custom error class for authentication failures 401(unauthorized)
+ * @extends Error
+ */
 class AuthenticationError extends Error {
     constructor(message) {
         super(message);
@@ -50,7 +76,10 @@ class AuthenticationError extends Error {
     }
 }
 
-// permission issues (403 forbidden)
+/**
+ * Custom error class for permission issues 403(Forbidden)
+ * @extends Error
+ */
 class ForbiddenError extends Error {
     constructor(message) {
         super(message);
@@ -58,7 +87,10 @@ class ForbiddenError extends Error {
     }
 }
 
-// resources not found or non exiting (404 not found)
+/**
+ * Custom error class for resources not found or non existing 404(Not Found)
+ * @extends Error
+ */
 class NotFoundError extends Error {
     constructor(message) {
         super(message);
@@ -66,7 +98,11 @@ class NotFoundError extends Error {
     }
 }
 
-// conflict with existing resources (409 Conflict)
+/**
+ * Custom error class for conflicts with existing resources
+ * E.g. a user already existing when attempting to register a new user
+ * @extends Error
+ */
 class ConflictError extends Error {
     constructor(message) {
         super(message);
@@ -75,6 +111,12 @@ class ConflictError extends Error {
 }
 
 // I'm a teapot (418)
+/**
+ * Custom error class for I'm a Teapot 418(I'm a teapot)
+ * old aprils fools joke
+ * just for fun
+ * @extends Error
+ */
 class ImATeapotError extends Error {
     constructor(message) {
         super(message);
