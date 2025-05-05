@@ -1,3 +1,8 @@
+/**
+ * Main application entry point for Haru_Chat_Auth_Server
+ * Sets up Express server, middleware and routes.
+ */
+
 import express from "express";
 import dotenv from "dotenv";
 
@@ -8,13 +13,27 @@ import { router as userRoutes } from "./routes/userRoutes.js";
 // load environment variables
 dotenv.config();
 
+/**
+ * Express application instance.
+ * @type {express.Application}
+ */
 const app = express();
+
+/**
+ * Server port from .env file
+ * @type {string|number}
+ */
 const port = process.env.PORT;
 
 // middleware for parsing JSON bodies
 app.use(express.json());
 
-// home route/root route
+/**
+ * Home route handler
+ * 
+ * @param {express.Request} req - Express request object
+ * @param {express.Response} res - Express response object
+ */
 app.get("/", (req, res) => {
     res.send("Welcome to<br>Haru_chat auth and user management");
 });
@@ -29,7 +48,12 @@ app.use("/api/users", userRoutes);
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-// start server
+/**
+ * Start the Express server.
+ * 
+ * @listens {number} port - the port to listen on
+ * @event listening - Emitted when server starts listening
+ */
 app.listen(port, () => {
     console.log(`Server starting on port: ${port}...`);
 });
