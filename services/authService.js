@@ -30,7 +30,7 @@ class AuthService {
      * @async
      * @param {string} username - User's username
      * @param {string} password - User's password (will be hashed)
-     * @returns {Promise<Object} Result object with user data
+     * @returns {Promise<Object>} Result object with user data
      * @throws {ValidationError} If username or password is not present
      * @throws {ConflictError} If user already exists
      */
@@ -63,7 +63,7 @@ class AuthService {
      * @async
      * @param {string} username - User's username
      * @param {string} password - User's password
-     * @returns {Promise<Object} - Result object with token and user data
+     * @returns {Promise<Object>} - Result object with token and user data
      * @throws {NotFoundError} If user is not found
      * @throws {ForbiddenError} if user is banned or doesn't have access
      */
@@ -108,7 +108,7 @@ class AuthService {
      * 
      * @async
      * @param {number} userId - ID of the user to validate
-     * @returns {Promise<Object} Result object with user data
+     * @returns {Promise<Object>} Result object with user data
      * @throws {NotFoundError} If user is not found
      * @throws {ForbiddenError} If user is banned
      */
