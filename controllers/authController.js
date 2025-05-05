@@ -21,7 +21,7 @@ import { AuthService } from "../services/authService.js";
 class AuthController {
     /**
      * Creates an instance of AuthController.
-     * @param {*} authService - Service handling authentication logic
+     * @param {AuthService} authService - Service handling authentication logic
      */
     constructor(authService) {
         this._authService = authService;
