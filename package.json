@@ -22,7 +22,7 @@
     "server"
   ],
   "author": "Halfdan halfdansc@gmail.com",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/HelloHaruSystem/haru_chat_auth_server/issues"
   },
