@@ -1,3 +1,10 @@
+/**
+ * Authentication controller for Haru_Chat.
+ * Handles HTTP requests for authentication
+ * 
+ * @module controllers/authController
+ */
+
 import { ValidationError } from "../middleware/errorMiddleware.js";
 import { AuthService } from "../services/authService.js";
 

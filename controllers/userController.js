@@ -1,11 +1,36 @@
-import { ValidationError } from "../middleware/errorMiddleware.js";
+/**
+ * User controller for Haru_Chat.
+ * handles HTTP requests for user management
+ * 
+ * @module controllers/userController
+ */
+
+import { ForbiddenError, NotFoundError, ValidationError } from "../middleware/errorMiddleware.js";
 import { UserService } from "../services/userService.js";
 
+/**
+ * Controller class for user management
+ */
 class UserController {
+    /**
+     * Constructor method
+     * Creates an instance of userController.
+     * 
+     * @param {UserService} userService - Service handling user operations
+     */
     constructor(userService) {
         this._userService = userService;
     }
 
+    /**
+     * create a new user
+     * 
+     * @async
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {Function} next - Express next middleware function
+     * @throws {ValidationError} If username or password are missing
+     */
     createUser = async (req, res, next) => {
         try {
             const { username, password } = req.body;
@@ -24,6 +49,17 @@ class UserController {
         }
     };
 
+    /**
+     * Gets a user by ID
+     * 
+     * @async
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {Function} next - Express next middleware function
+     * @throws {ValidationError} If ID is invalid
+     * @throws {ForbiddenError} If user lacks permission
+     * @throws {NotFoundError} If user is not found
+     */
     getUserById = async (req, res, next) => {
         try {
             const id = parseInt(req.params.id, 10);
@@ -52,6 +88,16 @@ class UserController {
         }
     };
 
+    /**
+     * Deletes a user by ID.
+     * 
+     * @async
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {Function} next - Express next middleware function
+     * @throws {ValidationError} If ID is invalid
+     * @throws {NotFoundError} If user not found
+     */
     deleteUser = async (req, res, next) => {
         try {
             const id = parseInt(req.params.id, 10);
@@ -75,6 +121,16 @@ class UserController {
         }
     };
 
+    /**
+     * Bans a user by ID.
+     * 
+     * @async
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {Function} next - Express next middleware function
+     * @throws {ValidationError} If ID is invalid
+     * @throws {NotFoundError} If user not found
+     */
     banUser = async (req, res, next) => {
         try {
             const id = parseInt(req.params.id, 10);
@@ -98,6 +154,16 @@ class UserController {
         }
     };
 
+    /**
+     * Unbans a user by ID.
+     * 
+     * @async
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {Function} next - Express next middleware function
+     * @throws {ValidationError} If ID is invalid
+     * @throws {NotFoundError} If user not found
+     */
     unbanUser = async (req, res, next) => {
         try {
             const id = parseInt(req.params.id, 10);
@@ -121,6 +187,14 @@ class UserController {
         }
     };
 
+    /**
+     * Gets all users.
+     * 
+     * @async
+     * @param {Object} req - Express request object
+     * @param {Object} res - Express response object
+     * @param {Function} next - Express next middleware function
+     */
     getAllUsers = async (req, res, next) => {
         try {
             const users = await this._userService.getAllUsers();
