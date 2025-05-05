@@ -9,6 +9,7 @@
 import bcrypt from "bcrypt";
 
 import { User } from "./../models/User.js";
+import { passwordConfig } from "./../config/auth.js";
 
 /**
  * Service class for handling user-related stuff
@@ -22,7 +23,7 @@ class UserService {
      */
     constructor(db) {
         this._db = db;
-        this._saltRounds = 10;
+        this._saltRounds = parseInt(passwordConfig.saltRounds, 10);
     }
 
     /**
@@ -94,7 +95,6 @@ class UserService {
                 false
             );
 
-            // TODO: implement saveUser function in the dbService
             const userId = await this._db.saveUser(user);
 
             // set the ID given by the db
