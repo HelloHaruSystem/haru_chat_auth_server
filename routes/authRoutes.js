@@ -57,7 +57,6 @@ router.post("/login", authController.login);
  * @name ValidateUser
  * @route
  * @authentication JWT required
- * @bodyparam {String} token - User's JWT Token
  * @bodyparam {string} username - User's username
  * @returns {Object} Result with token and and user data
  */
