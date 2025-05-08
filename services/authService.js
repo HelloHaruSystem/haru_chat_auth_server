@@ -7,7 +7,7 @@
 
 import bcrypt from "bcrypt";
 
-import { generateToken } from "./../utils/jwtUtils.js";
+import { generateToken, verifyToken } from "./../utils/jwtUtils.js";
 import { ValidationError, AuthenticationError, NotFoundError, ConflictError, ForbiddenError } from "../middleware/errorMiddleware.js";
 
 /**
@@ -127,6 +127,52 @@ class AuthService {
             return {
                 success: true,
                 user
+            };
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * Validates a JWT token and verifies the associated username
+     * 
+     * @async
+     * @param {string} token - The JWT token to validate
+     * @param {string} username - Username to verify against the token
+     * @returns {Promise<Object>} Result object with validation status and user data
+     * @throws {AuthenticationError} If token is invalid or username mismatch
+     * @throws {NotFoundError} If user is not found
+     * @throws {ForbiddenError} If user is banned
+     */
+    async validateTokenWithUsername(token, username) {
+        try {
+            if (!token || !username) {
+                throw new ValidationError("Token and username are required");
+            }
+            
+            // Verify the token
+            let decoded;
+            try {
+                decoded = verifyToken(token);
+            } catch (error) {
+                if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+                    throw new AuthenticationError('Invalid or expired token');
+                }
+                throw error;
+            }
+            
+            // Check if the username in the token matches the provided username
+            if (decoded.username !== username) {
+                throw new AuthenticationError('Username mismatch');
+            }
+            
+            // Validate that the user exists and is not banned
+            const userResult = await this.validateToken(decoded.userId);
+            
+            return {
+                success: true,
+                message: 'Token is valid',
+                user: userResult.user
             };
         } catch (error) {
             throw error;

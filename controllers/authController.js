@@ -5,7 +5,7 @@
  * @module controllers/authController
  */
 
-import { ValidationError } from "../middleware/errorMiddleware.js";
+import { AuthenticationError, ValidationError } from "../middleware/errorMiddleware.js";
 import { AuthService } from "../services/authService.js";
 
 /**
@@ -83,7 +83,25 @@ class AuthController {
      */
     validate = async (req, res, next) => {
         try {
+            const { username } = req.body;
+
+            // get the token from the Authorization header
+            const authHeader = req.headers.authorization;
+            if (!authHeader || !authHeader.startsWith("Bearer ")) {
+                throw new AuthenticationError("No token provided or invalid format");
+            }
+
+            // extract the token
+            const token = authHeader.split(' ')[1];
             
+            // auth service to validate token
+            const result = await this._authService.validateTokenWithUsername(token, username);
+
+            res.status(200).json({
+                valid: true,
+                message: result.message,
+                user: result.user
+            });
         } catch (error) {
             next(error);
         }
