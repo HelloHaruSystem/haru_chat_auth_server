@@ -49,6 +49,20 @@ router.post("/register", authController.register);
  */
 router.post("/login", authController.login);
 
+/**
+ * Post /api/auth/validate
+ * Token validation endpoint
+ * Validates JWT token for the Authorization header and checks username
+ * 
+ * @name ValidateUser
+ * @route
+ * @authentication JWT required
+ * @bodyparam {String} token - User's JWT Token
+ * @bodyparam {string} username - User's username
+ * @returns {Object} Result with token and and user data
+ */
+router.post("/validate", authController.validate);
+
 // protected routes
 
 /**

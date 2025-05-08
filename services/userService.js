@@ -293,6 +293,7 @@ class UserService {
             };
         } catch (error) {
             throw new Error(`Error trying to Authenticate user ${username}: ${error}`);
+
         }
     }
 }

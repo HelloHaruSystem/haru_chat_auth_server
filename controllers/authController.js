@@ -30,6 +30,7 @@ class AuthController {
     /**
      *  Register a new user.
      * 
+     * @async
      * @param {Request} req - Express request object. 
      * @param {Response} res - Express response object. 
      * @param {Function} next - Express next middleware function. 
@@ -52,6 +53,7 @@ class AuthController {
     /**
      * logs in a user
      * 
+     * @async
      * @param {Request} req - Express request object. 
      * @param {Response} res - Express response object. 
      * @param {Function} next - Express next middleware function. 
@@ -71,9 +73,26 @@ class AuthController {
         }
     }
 
+    /**
+     * Validates a user.
+     * 
+     * @async
+     * @param {Request} req - Express request object.
+     * @param {Response} res - Express response object.
+     * @param {Function} next - Express next middleware function.
+     */
+    validate = async (req, res, next) => {
+        try {
+            
+        } catch (error) {
+            next(error);
+        }
+    }
+
    /**
     * Gets the current user information
     *  
+    * @async
     * @param {Request} req - Express request object. 
     * @param {Response} res - Express response object. 
     * @param {Function} next - Express next middleware function. 

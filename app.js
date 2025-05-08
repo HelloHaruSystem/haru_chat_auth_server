@@ -57,6 +57,6 @@ app.use(notFoundHandler);
  * @listens {number} port - the port to listen on
  * @event listening - Emitted when server starts listening
  */
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Server starting on port: ${port}...`);
 });
