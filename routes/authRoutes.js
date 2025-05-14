@@ -25,7 +25,7 @@ const router = express.Router();
  */
 const corsOptions = {
     origin: '*', //TODO: replace when in production with frontend domain/ip
-    methods: ['POST'],
+    methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };
@@ -35,6 +35,10 @@ const dbService = new DbService();
 const userService = new UserService(dbService);
 const authService = new AuthService(userService);
 const authController = new AuthController(authService);
+
+// Handle OPTIONS preflight requests for the login and register endpoint
+router.options("/login", cors(corsOptions));
+router.options("/register", cors(corsOptions));
 
 /**
  * POST /api/auth/register
