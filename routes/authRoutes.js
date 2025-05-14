@@ -6,6 +6,7 @@
  */
 
 import express from "express";
+import cors from "cors";
 
 import { AuthService } from "../services/authService.js";
 import { AuthController } from "../controllers/authController.js";
@@ -19,6 +20,16 @@ import { authenticate, authorize } from "../middleware/authMiddleware.js";
  */
 const router = express.Router();
 
+/**
+ * Cors configuration options
+ */
+const corsOptions = {
+    origin: '*', //TODO: replace when in production with frontend domain/ip
+    methods: ['POST'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+
 // initialize services and controller
 const dbService = new DbService();
 const userService = new UserService(dbService);
@@ -28,6 +39,7 @@ const authController = new AuthController(authService);
 /**
  * POST /api/auth/register
  * Registers a new user.
+ * Frontend is allowed to use this
  * 
  * @name RegisterUser
  * @route {POST} /api/auth/register
@@ -35,11 +47,12 @@ const authController = new AuthController(authService);
  * @bodyparam {string} password - User's password
  * @returns {Object} Result with user data
  */
-router.post("/register", authController.register);
+router.post("/register", cors(corsOptions), authController.register);
 
 /**
  * POST /api/auth/login
  * Authenticates a user and returns a JWT.
+ * Frontend is allowed to use this
  * 
  * @name LoginUser
  * @route {POST} /api/auth/login
@@ -47,7 +60,7 @@ router.post("/register", authController.register);
  * @bodyparam {string} password - User's password
  * @returns {Object} Result with token and user data
  */
-router.post("/login", authController.login);
+router.post("/login", cors(corsOptions), authController.login);
 
 /**
  * Post /api/auth/validate
